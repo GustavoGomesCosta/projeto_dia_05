@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2D7D2D">
+  <title>VotaSim — votação</title>
+  <link rel="icon" type="image/x-icon" href="img/icone_3.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Cabeçalho: personalize o nome e a descrição da plataforma neste bloco. -->
+  <header class="cabecalho-site">
+    <div class="conteudo-cabecalho identidade-marca">
+      <div class="icone-marca">
+        <img src="img/icone_3.png" alt="Ícone da VotaSim">
+      </div>
+      <div>
+        <h1>VotaSim</h1>
+        <p>Uma votação simples e transparente</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navegação acessível entre a tela de votação e o manual de instruções. -->
+  <nav class="navegacao-site" aria-label="Navegação principal">
+    <div class="conteudo-navegacao">
+      <a class="link-navegacao" href="#inicio" data-view-link="inicio" aria-current="page">
+        <span>Início</span>
+      </a>
+      <a class="link-navegacao" href="#instrucoes" data-view-link="instrucoes">Manual de instruções / Como usar</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Tela principal: cadastro, área de voto e cartões dos candidatos. -->
+    <section class="tela conteudo-pagina" id="view-inicio" data-view="inicio" aria-labelledby="titulo-inicio">
+      <div class="apresentacao">
+        <p class="destaque-apresentacao">Área de votação</p>
+        <h2 id="titulo-inicio">Escolha seu candidato</h2>
+        <p>Digite o número do candidato para conferir os dados antes de confirmar seu voto.</p>
+      </div>
+
+      <!-- A prévia é atualizada enquanto o número digitado corresponde a um candidato. -->
+      <section class="painel" aria-labelledby="titulo-voto">
+        <div class="cabecalho-painel">
+          <h3 id="titulo-voto">Voto</h3>
+          <p>Confira a identificação do candidato antes de registrar seu voto.</p>
+        </div>
+
+        <div class="area-votacao">
+          <div class="previa-voto" id="vote-preview" aria-live="polite" aria-atomic="true">
+            <div class="mensagem-previa">
+              <span class="icone-previa" aria-hidden="true">◉</span>
+              <p>Digite um número válido para ver a foto e os dados do candidato aqui.</p>
+            </div>
+          </div>
+
+          <form class="formulario-voto" id="vote-form">
+            <div class="campo">
+              <label for="vote-number">Número do candidato</label>
+              <input
+                id="vote-number"
+                name="numero"
+                type="number"
+                min="1"
+                step="1"
+                inputmode="numeric"
+                placeholder="Ex.: 10"
+                required
+                aria-describedby="vote-hint vote-status"
+              >
+              <p class="dica-campo" id="vote-hint">Informe um número inteiro maior que zero.</p>
+            </div>
+            <button class="botao" id="vote-button" type="submit" disabled>Confirmar voto</button>
+            <p class="mensagem-status" id="vote-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- A lista é posicionada depois da votação para facilitar a conferência. -->
+      <section class="secao-candidatos" aria-labelledby="titulo-candidatos">
+        <div class="cabecalho-secao">
+          <div>
+            <h3 id="titulo-candidatos">Candidatos</h3>
+            <p>Confira as opções disponíveis para votar.</p>
+          </div>
+        </div>
+        <div class="lista-candidatos" id="candidate-list" aria-live="polite"></div>
+      </section>
+
+      <!-- Campos de cadastro; somente nome e número são obrigatórios. -->
+      <section class="painel painel-cadastro" aria-labelledby="titulo-cadastro">
+        <div class="cabecalho-painel">
+          <h3 id="titulo-cadastro">Cadastro de candidato</h3>
+          <p>Adicione um candidato para que ele apareça na lista e possa receber votos.</p>
+        </div>
+
+        <form class="formulario-cadastro" id="candidate-form">
+          <div class="campo">
+            <label for="candidate-name">Nome</label>
+            <input id="candidate-name" name="nome" type="text" maxlength="80" autocomplete="name" placeholder="Nome do candidato" required>
+          </div>
+          <div class="campo">
+            <label for="candidate-number">Número</label>
+            <input id="candidate-number" name="numero" type="number" min="1" step="1" inputmode="numeric" placeholder="Ex.: 10" required>
+            <p class="dica-campo">O número deve ser um inteiro maior que zero e ainda não cadastrado.</p>
+          </div>
+          <div class="campo campo-largo">
+            <label for="candidate-photo">URL da imagem <span>(opcional)</span></label>
+            <input id="candidate-photo" name="imagem" type="url" maxlength="2048" placeholder="https://exemplo.com/foto.jpg">
+          </div>
+          <div class="campo campo-largo">
+            <label for="candidate-description">Descrição <span>(opcional)</span></label>
+            <textarea id="candidate-description" name="descricao" maxlength="240" placeholder="Escreva uma breve apresentação"></textarea>
+          </div>
+          <button class="botao" type="submit">Cadastrar candidato</button>
+          <p class="mensagem-status" id="registration-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </section>
+
+    <!-- Manual com dez passos para cadastrar candidatos e registrar votos. -->
+    <section class="tela conteudo-pagina" id="view-instrucoes" data-view="instrucoes" aria-labelledby="titulo-instrucoes" hidden>
+      <div class="apresentacao">
+        <p class="destaque-apresentacao">Ajuda rápida</p>
+        <h2 id="titulo-instrucoes">Manual de instruções</h2>
+        <p>Siga estes passos para preparar a votação e registrar sua escolha.</p>
+      </div>
+
+      <div class="painel painel-instrucoes">
+        <ol class="lista-instrucoes">
+          <li><strong>Abra a página Início.</strong> Ela contém o formulário de cadastro, a lista e a área de votação.</li>
+          <li><strong>Encontre “Cadastro de candidato”.</strong> Preencha os dados da pessoa que participará da votação.</li>
+          <li><strong>Informe o nome.</strong> O nome é obrigatório e será exibido no cartão do candidato.</li>
+          <li><strong>Escolha um número inteiro maior que zero.</strong> Cada candidato precisa de um número único.</li>
+          <li><strong>Adicione uma foto, se desejar.</strong> Cole uma URL válida; sem foto, a aplicação mostrará uma imagem padrão.</li>
+          <li><strong>Escreva uma descrição, se desejar.</strong> Uma apresentação curta ajuda as pessoas a identificarem o candidato.</li>
+          <li><strong>Selecione “Cadastrar candidato”.</strong> Os dados válidos aparecerão na lista abaixo da área de votação.</li>
+          <li><strong>Digite o número na seção Voto.</strong> A foto, o nome, o número e a descrição aparecerão na prévia à esquerda.</li>
+          <li><strong>Confira a prévia com atenção.</strong> O botão de confirmação só fica disponível quando o número corresponde a um candidato.</li>
+          <li><strong>Selecione “Confirmar voto”.</strong> O voto será contabilizado e os dados continuarão salvos neste navegador.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="script/script.js" defer></script>
+</body>
+</html>

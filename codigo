@@ -1,0 +1,302 @@
+<!--
+===============================================================================
+PARTE 1 DE 3 — HTML
+Arquivo relacionado: index.html
+===============================================================================
+
+O HTML descreve a estrutura e o conteúdo da página. Ele não decide sozinho as
+cores ou as ações: o CSS (css/style.css) cuida da apresentação e o JavaScript
+(script/script.js) implementa cadastro, prévia, votos e navegação.
+
+COMO ABRIR E PERSONALIZAR
+1. Abra index.html no navegador para usar o site.
+2. Para mudar textos, nome da marca ou instruções, edite o conteúdo entre as
+   tags correspondentes no index.html.
+3. Para trocar imagens, altere os caminhos relativos em src. Por exemplo,
+   src="img/icone_3.png" aponta para a imagem dentro da pasta img.
+4. Mantenha os caminhos css/style.css e script/script.js se não mover esses
+   arquivos. Se mover um arquivo, atualize também seu caminho no HTML.
+5. Os atributos id usados pelo JavaScript são identificadores de integração:
+   alterá-los exige atualizar os seletores equivalentes em script/script.js.
+
+ESTRUTURA DO DOCUMENTO
+- <!DOCTYPE html> informa ao navegador que deve interpretar HTML moderno.
+- <html lang="pt-BR"> abre o documento e informa o idioma. Isso ajuda leitores
+  de tela, mecanismos de busca e ferramentas de tradução.
+- <head> contém metadados e ligações a arquivos externos, que não são o conteúdo
+  principal visível.
+- charset="UTF-8" permite exibir corretamente acentos e caracteres especiais.
+- name="viewport" ajusta a largura da página ao tamanho da tela do dispositivo.
+- theme-color define a cor sugerida para a interface do navegador em celulares.
+- <title> define o texto da aba do navegador.
+- rel="icon" define o ícone associado à página/aba.
+- rel="stylesheet" conecta o arquivo CSS externo.
+- <body> contém tudo que a pessoa vê ou utiliza na página.
+
+CABEÇALHO E NAVEGAÇÃO
+- <header> é a área de identificação do site. A imagem da marca usa <img>;
+  seu texto alt descreve a imagem para quem usa leitor de tela.
+- <h1> é o título principal da página; personalize "VotaSim" para mudar a marca.
+- <nav> agrupa links de navegação. aria-label dá nome acessível à região.
+- href="#inicio" e href="#instrucoes" identificam os destinos das duas telas.
+- data-view-link é um atributo de dados lido pelo JavaScript para alternar a
+  tela correspondente sem recarregar a página.
+- aria-current="page" informa qual link representa a tela atual. O JavaScript
+  atualiza esse atributo ao alternar de tela.
+
+TELA PRINCIPAL E VOTAÇÃO
+- <main> agrupa o conteúdo principal, facilitando a navegação assistiva.
+- <section> organiza áreas temáticas, como votação, lista e cadastro.
+- aria-labelledby liga uma região ao título cujo id é indicado, melhorando sua
+  identificação em leitores de tela.
+- data-view="inicio" identifica uma tela que o JavaScript pode mostrar ou ocultar.
+- A área #vote-preview começa com uma mensagem orientadora. O JavaScript
+  substitui seu conteúdo quando encontra um candidato para o número digitado.
+- aria-live="polite" avisa leitores de tela sobre atualizações sem interromper
+  abruptamente o que estiver sendo lido.
+- O formulário #vote-form recebe o número de voto.
+- <label for="vote-number"> associa o texto visível ao campo que possui esse id.
+- type="number" oferece entrada numérica; min="1" impede valores inferiores a 1
+  pela validação nativa; step="1" indica que o campo deve avançar em inteiros;
+  required impede o envio vazio pelo navegador.
+- inputmode="numeric" sugere um teclado numérico em dispositivos móveis.
+- placeholder é apenas uma dica de preenchimento; não substitui o <label>.
+- aria-describedby associa instruções e mensagens ao campo.
+- O botão de confirmação começa com disabled. O JavaScript só o habilita
+  quando o número digitado corresponde a um candidato cadastrado.
+
+LISTA E FORMULÁRIO DE CADASTRO
+- #candidate-list é o contêiner vazio que recebe os cartões gerados pelo
+  JavaScript; não é necessário escrever cartões manualmente no HTML.
+- O formulário #candidate-form coleta nome, número, imagem e descrição.
+- Os campos de nome e número usam required e, portanto, são obrigatórios.
+- maxlength limita a quantidade máxima de caracteres aceita.
+- autocomplete="name" permite que o navegador sugira dados pessoais guardados.
+- O campo de imagem é type="url"; quando preenchido, espera uma URL válida.
+- Os campos de imagem e descrição são opcionais porque não possuem required.
+- <textarea> permite uma descrição com várias linhas.
+- role="status" e aria-live comunicam sucesso ou erro de cadastro/voto a leitores
+  de tela; os textos são atualizados pelo JavaScript.
+
+MANUAL DE INSTRUÇÕES
+- A seção data-view="instrucoes" é a segunda tela.
+- O atributo hidden deixa a tela invisível inicialmente; ao abrir o manual, o
+  JavaScript remove/ativa essa condição de acordo com a navegação.
+- <ol> e <li> representam uma lista ordenada de instruções. A ordem no HTML
+  corresponde aos dez passos exibidos.
+- <strong> destaca a ação principal de cada etapa.
+
+IMPORTANTE
+Os formulários são locais: o HTML organiza os campos, mas não envia dados a um
+servidor. O armazenamento e a confirmação são tratados pelo JavaScript no
+navegador atual.
+
+===============================================================================
+PARTE 2 DE 3 — CSS
+Arquivo relacionado: css/style.css
+===============================================================================
+
+O CSS define aparência, cores, tamanhos, alinhamento, estados de interação e
+adaptação a diferentes larguras de tela. Ele estiliza os elementos HTML através
+de seletores de tag (por exemplo, body), classe (por exemplo, .painel), id
+(por exemplo, #vote-number) ou atributos (por exemplo, [hidden]).
+
+PALETA E VARIÁVEIS
+- :root representa o elemento raiz do documento e guarda variáveis --nome.
+- var(--nome) reutiliza uma variável. Assim, alterar uma cor central pode mudar
+  várias áreas sem procurar e editar cada regra individualmente.
+- --cor-cabecalho (#2D7D2D): verde do cabeçalho.
+- --cor-azul (#000947): azul-marinho usado em bordas e detalhes.
+- --cor-azul-vivo (#394FAD): cor principal dos botões.
+- --cor-fundo (#D7F7E1): quarta cor da paleta, usada como fundo geral.
+- --cor-erro (#B72818): cor de ações destrutivas e erros.
+- As outras variáveis controlam superfícies, largura máxima, arredondamento e
+  sombra. Podem ser ajustadas no bloco :root.
+
+SELETORES E PROPRIEDADES MAIS USADOS
+- .nome-classe aplica estilos a elementos cujo HTML contém class="nome-classe".
+- #identificador aplica estilos ao elemento com o id indicado.
+- body estiliza a página inteira: margin: 0 remove a margem padrão, background
+  define o fundo, color define a cor de texto e font-family escolhe a fonte.
+- box-sizing: border-box faz width e height incluírem padding e bordas, o que
+  facilita calcular a largura final dos campos e cartões.
+- display: flex organiza itens em uma linha/coluna flexível; gap define espaço
+  entre eles; align-items alinha no eixo transversal.
+- display: grid organiza conteúdo em linhas e colunas; grid-template-columns
+  define as colunas; minmax(0, 1fr) permite que elas encolham sem transbordar.
+- width, max-width, min-height e padding controlam dimensão e espaço interno.
+- margin controla espaço externo; border define contorno; border-radius arredonda.
+- color controla o texto; background controla a superfície/fundo.
+- font-size, font-weight e line-height controlam tamanho, peso e altura das linhas.
+- object-fit: cover preenche a caixa de imagem sem distorcer sua proporção,
+  recortando o excedente.
+- box-shadow cria sombra discreta; transition suaviza mudanças entre estados.
+- :hover estiliza o ponteiro sobre um botão/link; :focus-visible destaca foco
+  de teclado; :disabled mostra um botão desativado; [hidden] oculta uma tela.
+- ::before cria conteúdo decorativo antes do elemento (usado para os números do
+  manual); content fornece o texto e counter() apresenta a contagem da etapa.
+
+ÁREAS VISUAIS
+- .cabecalho-site usa a variável verde e separa a marca do restante da página.
+- .navegacao-site usa o azul-marinho. Os links são brancos e o link ativo ganha
+  fundo branco e texto escuro, para contraste.
+- .conteudo-cabecalho, .conteudo-navegacao e .conteudo-pagina compartilham uma
+  largura máxima e ficam centralizados por margin-inline: auto.
+- .painel cria os blocos brancos com contorno, cantos arredondados e sombra.
+- .area-votacao distribui a prévia e o formulário em colunas.
+- .previa-voto e .mensagem-previa desenham a caixa e o estado de orientação
+  mostrado antes de localizar um candidato.
+- .previa-candidato organiza a imagem e os dados de quem será votado.
+- .formulario-voto e .formulario-cadastro usam grid para espaçar controles.
+- .campo organiza rótulo, campo e dicas; input e textarea compartilham dimensões,
+  borda, fonte, fundo e estado de foco.
+- .botao aplica estilo comum às ações principais; .botao-excluir-candidato tem
+  aparência vermelha para alertar que a exclusão é destrutiva.
+- .mensagem-status apresenta feedback. Os seletores [data-type="error"] e
+  [data-type="success"] mudam a cor conforme o estado enviado pelo JavaScript.
+- .lista-candidatos organiza cartões automaticamente; .cartao-candidato mostra
+  foto, dados, votos e botão para excluir.
+- .lista-instrucoes usa um contador CSS para desenhar as dez etapas.
+
+LAYOUT RESPONSIVO
+- @media (max-width: 700px) aplica regras em telas estreitas: reduz margens,
+  transforma as colunas da votação e do cadastro em uma coluna e permite rolar
+  horizontalmente a navegação, se necessário.
+- @media (max-width: 420px) reduz imagens e ajusta cartões para celulares muito
+  estreitos.
+- clamp(valor-mínimo, valor-flexível, valor-máximo) muda o tamanho gradualmente,
+  respeitando limites; min() escolhe o menor valor entre as opções.
+
+COMO PERSONALIZAR
+1. Troque as cores apenas nas variáveis do :root sempre que possível.
+2. Para estilizar uma seção específica, use sua classe existente, por exemplo
+   .cartao-candidato. Preserve os nomes das classes usados no HTML e no JS.
+3. Para alterar a distribuição em celular, ajuste os limites das regras @media.
+4. Para mudar um seletor, lembre-se de que classe começa com ponto e id começa
+   com #. O nome deve corresponder exatamente ao HTML.
+5. Ao adicionar novas regras, coloque-as junto à seção correspondente e evite
+   duplicar seletores contraditórios.
+
+===============================================================================
+PARTE 3 DE 3 — JAVASCRIPT
+Arquivo relacionado: script/script.js
+===============================================================================
+
+O JavaScript conecta a interface aos dados. Ele encontra os elementos do HTML,
+valida formulários, grava dados em localStorage, cria cartões, atualiza a prévia,
+contabiliza votos, pede confirmação para exclusão e alterna as telas.
+
+COMO EXECUTAR E MANTER
+- index.html carrega este arquivo com <script src="script/script.js" defer>.
+- defer manda o navegador executar o script depois de interpretar o HTML. Assim,
+  seletores como document.querySelector("#candidate-form") já encontram os
+  elementos existentes.
+- O código usa JavaScript moderno (const/let, arrow functions, template strings,
+  spread, find/filter/map, FormData, dataset, append e replaceChildren).
+- Para adicionar uma interação, procure a referência do elemento e conecte um
+  evento com addEventListener. Evite colocar lógica extensa diretamente no HTML.
+- Ao mudar um id no HTML, atualize também o seletor #id neste arquivo.
+
+DADOS E ARMAZENAMENTO
+- STORAGE_KEYS contém nomes únicos usados como chaves do localStorage. Não troque
+  essas chaves se quiser preservar dados já cadastrados nesse navegador.
+- candidates é a lista de candidatos. Cada registro contém name, number, photo
+  e description.
+- votes é uma lista com candidateNumber e count, ou seja, número do candidato e
+  total de votos registrados.
+- localStorage mantém texto no navegador e sobrevive a recargas, mas é específico
+  deste navegador/perfil e deste endereço. Não sincroniza computadores e não é
+  banco seguro nem sistema eleitoral oficial.
+- JSON.stringify converte listas/objetos em texto para armazenar.
+- JSON.parse reconstitui os dados ao carregar.
+- readStoredArray lê uma chave; se não existir, começa com uma lista vazia.
+  Também verifica se o conteúdo é uma lista e apresenta erro no status/console
+  quando os dados estão inválidos.
+- saveStoredArray tenta gravar uma lista. Em caso de falha (por exemplo, espaço
+  indisponível), registra o erro e informa a pessoa em vez de aparentar sucesso.
+
+INTERFACE E CRIAÇÃO DE ELEMENTOS
+- document.querySelector localiza um elemento pelo seletor CSS; "#" seleciona id.
+- document.querySelectorAll encontra todos os elementos que correspondem ao
+  seletor e retorna uma coleção que pode ser percorrida.
+- showMessage escreve o feedback com textContent e ajusta data-type; usar
+  textContent exibe texto literal em vez de interpretar conteúdo como HTML.
+- createTextElement cria um elemento HTML, define uma classe e insere texto.
+- createCandidateImage cria imagem com texto alternativo, carregamento tardio e
+  imagem reserva quando a imagem escolhida não carrega.
+- FALLBACK_IMAGE é uma imagem SVG escrita como data URL, usada sem foto ou
+  quando a URL do candidato falha. Para trocar o desenho, altere o SVG nessa
+  constante ou substitua por um caminho de imagem válido.
+- createCandidateDetails monta nome, número, descrição e, nos cartões, contagem
+  de votos e botão de exclusão.
+- getVoteCount procura o total de votos do número solicitado; sem registro,
+  considera que ainda existem zero votos.
+- renderCandidates apaga o conteúdo atual da lista e a reconstrói. Ordena pelo
+  número, mostra um estado vazio quando não há candidatos e cria um cartão para
+  cada candidato. A imagem e o texto são criados separadamente, sem inserir
+  valores do usuário como HTML.
+
+PRÉVIA DE VOTO
+- updateVotePreview lê voteNumber.valueAsNumber, procura um candidato com o
+  mesmo número e limpa a prévia anterior com replaceChildren().
+- Se não houver candidato, mostra uma orientação e desabilita o botão.
+- Se houver correspondência, cria a prévia com foto, nome, número e descrição,
+  e habilita o botão.
+- O evento input roda essa função a cada alteração do campo, portanto a prévia
+  aparece sem recarregar a página.
+
+NAVEGAÇÃO
+- showView recebe "inicio" ou "instrucoes", oculta todas as telas não escolhidas
+  usando a propriedade hidden e ajusta aria-current no link ativo.
+- window.location.hash representa o fragmento após # na URL.
+- window.history.replaceState atualiza o endereço sem recarregar o documento.
+- Os eventos click dos links chamam showView.
+- hashchange observa alterações do fragmento feitas pela navegação do navegador.
+- Na inicialização, o fragmento existente decide qual tela abrir; sem fragmento,
+  a aplicação abre "inicio".
+
+CADASTRO DE CANDIDATOS
+- O evento submit do formulário evita o envio tradicional com preventDefault().
+- FormData lê os valores pelo atributo name de cada campo.
+- String(...).trim() transforma os valores em texto e remove espaços das pontas.
+- Number(...) converte o número digitado; Number.isInteger verifica se não há
+  fração; a comparação <= 0 impede zero e valores negativos.
+- candidates.some verifica se outro candidato já usa o número.
+- Se a validação falha, showMessage informa o motivo e focus() leva o teclado ao
+  campo que precisa de correção.
+- Se tudo está correto, o novo objeto é adicionado a uma nova lista e salvo.
+  Somente após o salvamento bem-sucedido a variável candidates é atualizada,
+  o formulário é limpo e lista/prévia são redesenhadas.
+
+VOTO E EXCLUSÃO
+- O submit do formulário de voto valida novamente o número no JavaScript; a
+  validação visual no navegador não substitui a checagem de dados existente.
+- find procura o candidato; map atualiza o total existente sem alterar o objeto
+  original; se ainda não havia registro, spread (...) e um novo objeto criam a
+  primeira contagem.
+- Depois de salvar, a lista é redesenhada para mostrar a nova contagem.
+- O evento click da lista usa delegação: um único ouvinte no contêiner recebe
+  cliques em botões criados dinamicamente.
+- closest("[data-excluir-candidato]") identifica o botão de exclusão clicado.
+- window.confirm mostra a pergunta nativa; Cancelar interrompe a operação.
+- Confirmar remove o candidato e os votos associados, salva as listas, atualiza
+  a mensagem e redesenha cartões/prévia. A exclusão de votos é explicitada na
+  confirmação, pois não pode ser desfeita pela interface.
+
+MENSAGENS E ERROS
+- console.error registra detalhes técnicos que ajudam a diagnosticar problemas.
+- As mensagens de status são apresentadas na própria página e com role="status".
+- Sempre valide dados antes de gravá-los e informe falhas de persistência; não
+  substitua erro por mensagem de sucesso.
+- As variáveis, funções e seletores são compartilhados entre as rotinas, então
+  preserve os nomes existentes ou atualize todos os usos ao renomeá-los.
+
+LIMITES IMPORTANTES
+- Esta aplicação é uma demonstração local. Qualquer pessoa com acesso ao mesmo
+  navegador pode cadastrar, votar, excluir ou editar dados locais.
+- Não há autenticação, servidor, prevenção de votos repetidos por pessoa, trilha
+  de auditoria ou garantia de integridade eleitoral. Para uma votação real, os
+  dados e as regras precisam de um backend confiável, autenticação e controles
+  apropriados.
+===============================================================================
+-->
